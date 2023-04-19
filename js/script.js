@@ -1,6 +1,6 @@
 import createHeader from './components/createHeader.js';
 import createCategory from './components/createCategory.js';
-import { getCategories } from './utils/apiService.js';
+import { getCategories, getCards } from './utils/apiService.js';
 import createElement from './utils/createElement.js';
 import createEditCategory from './components/createEditCategory.js';
 
@@ -48,6 +48,20 @@ const initApp = async () => {
     unmountAllSections();
     headerObj.updateHeaderTitle('Новая категория');
     editCategoryObj.mount();
+  });
+
+  // checking: which card was clicked and find edit icon
+  categoryObj.categoryList.addEventListener('click', async e => {
+    const target = e.target;
+    const categoryItem = target.closest('.category__item');
+
+    if (target.closest('.category__edit')) {
+      const dataCards = await getCards(categoryItem.dataset.id);
+      unmountAllSections();
+      headerObj.updateHeaderTitle('Редактирование');
+      editCategoryObj.mount(dataCards);
+      return;
+    }
   });
 };
 

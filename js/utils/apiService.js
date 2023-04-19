@@ -15,3 +15,19 @@ export const getCategories = async () => {
     return { err };
   }
 };
+
+export const getCards = async id => {
+  try {
+    const response = await fetch(`${API_URL}/api/category/${id}`);
+
+    if (!(response.status === 200 || response.status === 201)) {
+      const err = await response.json();
+      throw err;
+    }
+
+    const cards = await response.json();
+    return cards;
+  } catch (err) {
+    return { err };
+  }
+};
