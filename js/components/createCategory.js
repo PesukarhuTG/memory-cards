@@ -1,6 +1,7 @@
 import createElement from '../utils/createElement.js';
+import declOfNum from '../utils/wordsDeclination.js';
 
-const createCategory = (parentElem) => {
+const createCategory = parentElem => {
   const section = createElement('section', {
     className: 'category section-offset',
   });
@@ -14,7 +15,7 @@ const createCategory = (parentElem) => {
   });
 
   // create single card - one 'li' element
-  const createCategoryCard = (data) => {
+  const createCategoryCard = data => {
     const card = createElement('li', {
       className: 'category__item',
     });
@@ -42,7 +43,7 @@ const createCategory = (parentElem) => {
 
     const spanPair = createElement('span', {
       className: 'category__pairs',
-      textContent: `${data.length} пар`,
+      textContent: `${declOfNum(data.length, ['пара', 'пары', 'пар'])}`,
     });
 
     btnCardDesc.append(spanTitle, spanPair);
@@ -55,7 +56,7 @@ const createCategory = (parentElem) => {
   section.append(container);
 
   // show data function
-  const mount = (data) => {
+  const mount = data => {
     categoryList.textContent = '';
     parentElem.append(section);
 
