@@ -26,16 +26,16 @@ const createHeader = (parentElem) => {
     textContent: 'Добавить категорию',
   });
 
-  const updateHeaderTitle = title => {
+  const updateHeaderTitle = (title) => {
     headerTitle.textContent = title;
   };
 
-  logoLink.append(logoImg)
+  logoLink.append(logoImg);
   container.append(logoLink, headerTitle, headerBtn);
   parentElem.append(container);
 
   // to add extra functional
-  return { logoLink, headerBtn, updateHeaderTitle }
+  return { logoLink, headerBtn, updateHeaderTitle };
 };
 
 export default createHeader;

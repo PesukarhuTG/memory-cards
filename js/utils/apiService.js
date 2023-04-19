@@ -7,12 +7,11 @@ export const getCategories = async () => {
     if (!(response.status === 200 || response.status === 201)) {
       const err = await response.json();
       throw err;
-    } 
+    }
 
     const categories = await response.json();
     return categories;
-
   } catch (err) {
-    return { err }
+    return { err };
   }
 };

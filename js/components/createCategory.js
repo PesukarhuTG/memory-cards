@@ -53,7 +53,7 @@ const createCategory = (parentElem) => {
 
   container.append(categoryList);
   section.append(container);
-  
+
   // show data function
   const mount = (data) => {
     categoryList.textContent = '';
@@ -66,7 +66,7 @@ const createCategory = (parentElem) => {
   // clear data function
   const unmount = () => section.remove();
 
-  return { mount, unmount, categoryList }
+  return { mount, unmount, categoryList };
 };
 
 export default createCategory;

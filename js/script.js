@@ -18,10 +18,12 @@ const initApp = async () => {
 
     // 2) error checking
     if (categories.err) {
-      app.append(createElement('p', {
-        className: 'server-error',
-        textContent: 'Ошибка сервера, попробуйте позже',
-      }));
+      app.append(
+        createElement('p', {
+          className: 'server-error',
+          textContent: 'Ошибка сервера, попробуйте позже',
+        })
+      );
       return;
     }
 
@@ -34,10 +36,11 @@ const initApp = async () => {
   renderIndex(); // launch with 1st render
 
   headerObj.logoLink.addEventListener('click', renderIndex); //clicking by header logo redirects us to the main state
-  headerObj.headerBtn.addEventListener('click', () => { //clicking by header btn redirects us to the creation of new category
+  headerObj.headerBtn.addEventListener('click', () => {
+    //clicking by header btn redirects us to the creation of new category
     categoryObj.unmount(); // clear data
     headerObj.updateHeaderTitle('Новая категория');
-  }); 
+  });
 };
 
 initApp();
