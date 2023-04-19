@@ -117,6 +117,11 @@ const createEditCategory = parentElem => {
   title.addEventListener('focus', clearTitle);
   title.addEventListener('blur', checkTitle);
 
+  btnAddRow.addEventListener('click', () => {
+    const emptyRow = createTRCell(['', '']);
+    tbody.append(emptyRow);
+  });
+
   const mount = (data = { title: TITLE, pairs: [] }) => {
     tbody.textContent = '';
     title.textContent = data.title;
@@ -128,7 +133,8 @@ const createEditCategory = parentElem => {
     }
 
     const rows = data.pairs.map(createTRCell);
-    tbody.append(...rows);
+    const emptyRow = createTRCell(['', '']);
+    tbody.append(...rows, emptyRow);
     parentElem.append(editSection);
   };
 
