@@ -58,10 +58,9 @@ const createCategory = parentElem => {
   // show data function
   const mount = data => {
     categoryList.textContent = '';
-    parentElem.append(section);
-
     const cards = data.map(createCategoryCard);
     categoryList.append(...cards);
+    parentElem.append(section);
   };
 
   // clear data function

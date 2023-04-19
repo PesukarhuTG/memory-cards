@@ -2,6 +2,7 @@ import createHeader from './components/createHeader.js';
 import createCategory from './components/createCategory.js';
 import { getCategories } from './utils/apiService.js';
 import createElement from './utils/createElement.js';
+import createEditCategory from './components/createEditCategory.js';
 
 const initApp = async () => {
   const header = document.querySelector('.header');
@@ -9,9 +10,15 @@ const initApp = async () => {
 
   const headerObj = createHeader(header);
   const categoryObj = createCategory(app);
+  const editCategoryObj = createEditCategory(app);
 
-  const renderIndex = async (e) => {
+  const unmountAllSections = () => {
+    [categoryObj, editCategoryObj].forEach(obj => obj.unmount());
+  };
+
+  const renderIndex = async e => {
     e?.preventDefault();
+    unmountAllSections();
 
     // 1) get data from API
     const categories = await getCategories();
@@ -22,7 +29,7 @@ const initApp = async () => {
         createElement('p', {
           className: 'server-error',
           textContent: 'Ошибка сервера, попробуйте позже',
-        })
+        }),
       );
       return;
     }
@@ -38,8 +45,9 @@ const initApp = async () => {
   headerObj.logoLink.addEventListener('click', renderIndex); //clicking by header logo redirects us to the main state
   headerObj.headerBtn.addEventListener('click', () => {
     //clicking by header btn redirects us to the creation of new category
-    categoryObj.unmount(); // clear data
+    unmountAllSections();
     headerObj.updateHeaderTitle('Новая категория');
+    editCategoryObj.mount();
   });
 };
 
