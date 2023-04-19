@@ -1,7 +1,5 @@
-const declOfNum = (n, arr) => {
-  return (
-    n +
-    ' ' +
+const declOfNum = (n, arr) =>
+  `${n} ${
     arr[
       n % 10 === 1 && n % 100 !== 11
         ? 0
@@ -9,7 +7,7 @@ const declOfNum = (n, arr) => {
         ? 1
         : 2
     ]
-  );
-};
+  }
+`;
 
 export default declOfNum;
