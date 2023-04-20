@@ -1,4 +1,5 @@
 import createElement from '../utils/createElement.js';
+import mixArrayElements from '../utils/mixArrayElements.js';
 import showAlert from './showAlert.js';
 
 const createPairs = parentElem => {
@@ -71,7 +72,8 @@ const createPairs = parentElem => {
 
   const mount = data => {
     parentElem.append(pairs);
-    cardController(data.pairs);
+    const mixedPairsArr = mixArrayElements(data.pairs);
+    cardController(mixedPairsArr);
   };
 
   const unmount = () => pairs.remove();
