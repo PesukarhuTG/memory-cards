@@ -3,6 +3,7 @@ import createCategory from './components/createCategory.js';
 import { getCategories, getCards } from './utils/apiService.js';
 import createElement from './utils/createElement.js';
 import createEditCategory from './components/createEditCategory.js';
+import createPairs from './components/createPairs.js';
 
 const initApp = async () => {
   const header = document.querySelector('.header');
@@ -11,9 +12,10 @@ const initApp = async () => {
   const headerObj = createHeader(header);
   const categoryObj = createCategory(app);
   const editCategoryObj = createEditCategory(app);
+  const pairsObject = createPairs(app);
 
   const unmountAllSections = () => {
-    [categoryObj, editCategoryObj].forEach(obj => obj.unmount());
+    [categoryObj, editCategoryObj, pairsObject].forEach(obj => obj.unmount());
   };
 
   const renderIndex = async e => {
@@ -22,6 +24,7 @@ const initApp = async () => {
 
     // 1) get data from API
     const categories = await getCategories();
+    headerObj.updateHeaderTitle('Категории');
 
     // 2) error checking
     if (categories.err) {
@@ -62,7 +65,21 @@ const initApp = async () => {
       editCategoryObj.mount(dataCards);
       return;
     }
+
+    if (target.closest('.category__del')) {
+      console.log('del');
+      return;
+    }
+
+    if (categoryItem) {
+      const dataCards = await getCards(categoryItem.dataset.id);
+      unmountAllSections();
+      headerObj.updateHeaderTitle(`Категория: ${dataCards.title}`);
+      pairsObject.mount(dataCards);
+    }
   });
+
+  pairsObject.btnReturn.addEventListener('click', renderIndex);
 };
 
 initApp();
