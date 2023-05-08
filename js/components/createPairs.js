@@ -34,38 +34,42 @@ const createPairs = parentElem => {
   container.append(btnReturn, btnCard);
   pairs.append(container);
 
-  const cardController = data => {
-    let index = 0;
+  let dataCards = [];
 
-    spanFront.textContent = data[index][0];
-    spanBack.textContent = data[index][1];
+  const flipCard = () => {
+    console.log(btnCard.index);
+    btnCard.classList.add('card__item_flipped');
+    btnCard.removeEventListener('click', flipCard);
 
-    const flipCard = () => {
-      btnCard.classList.add('card__item_flipped');
-      btnCard.removeEventListener('click', flipCard);
+    setTimeout(() => {
+      btnCard.classList.remove('card__item_flipped');
 
       setTimeout(() => {
-        btnCard.classList.remove('card__item_flipped');
+        btnCard.index++;
+        if (btnCard.index === dataCards.length) {
+          spanFront.textContent = 'Карточки закончились';
+          showAlert('Возврат к категориям...', 2400);
+          // emulation returning to main page
+          setTimeout(() => {
+            btnReturn.click();
+          }, 2000);
+          return;
+        }
 
-        setTimeout(() => {
-          index++;
-          if (index === data.length) {
-            spanFront.textContent = 'Карточки закончились';
-            showAlert('Возврат к категориям...', 2400);
-            // emulation returning to main page
-            setTimeout(() => {
-              btnReturn.click();
-            }, 2000);
-            return;
-          }
+        spanFront.textContent = dataCards[btnCard.index][0];
+        spanBack.textContent = dataCards[btnCard.index][1];
 
-          spanFront.textContent = data[index][0];
-          spanBack.textContent = data[index][1];
+        btnCard.addEventListener('click', flipCard);
+      }, 100);
+    }, 1500);
+  };
 
-          btnCard.addEventListener('click', flipCard);
-        }, 100);
-      }, 1500);
-    };
+  const cardController = data => {
+    dataCards = [...data];
+    btnCard.index = 0; //create new attr
+
+    spanFront.textContent = data[btnCard.index][0];
+    spanBack.textContent = data[btnCard.index][1];
 
     btnCard.addEventListener('click', flipCard);
   };
@@ -76,7 +80,10 @@ const createPairs = parentElem => {
     cardController(mixedPairsArr);
   };
 
-  const unmount = () => pairs.remove();
+  const unmount = () => {
+    pairs.remove();
+    btnCard.removeEventListener('click', flipCard);
+  };
 
   return { btnReturn, mount, unmount };
 };
