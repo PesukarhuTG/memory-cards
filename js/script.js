@@ -1,9 +1,16 @@
 import createHeader from './components/createHeader.js';
 import createCategory from './components/createCategory.js';
-import { getCategories, getCards } from './utils/apiService.js';
+import {
+  getCategories,
+  getCards,
+  fetchEditCategory,
+  fetchCreateCategory,
+  fetchDeleteCategory,
+} from './utils/apiService.js';
 import createElement from './utils/createElement.js';
 import createEditCategory from './components/createEditCategory.js';
 import createPairs from './components/createPairs.js';
+import showAlert from './components/showAlert.js';
 
 const initApp = async () => {
   const header = document.querySelector('.header');
@@ -16,6 +23,39 @@ const initApp = async () => {
 
   const unmountAllSections = () => {
     [categoryObj, editCategoryObj, pairsObject].forEach(obj => obj.unmount());
+  };
+
+  const postHandler = async () => {
+    const data = editCategoryObj.parseData();
+    const dataCategories = await fetchCreateCategory(data);
+
+    if (dataCategories.err) {
+      showAlert(dataCategories.err.message);
+      return;
+    }
+
+    showAlert(`Новая категория "${data.title}" добавлена`);
+    unmountAllSections();
+    headerObj.updateHeaderTitle('Категории');
+    categoryObj.mount(dataCategories);
+  };
+
+  const patchHandler = async () => {
+    const data = editCategoryObj.parseData();
+    const dataCategories = await fetchEditCategory(
+      editCategoryObj.btnSave.dataset.id,
+      data,
+    );
+
+    if (dataCategories.err) {
+      showAlert(dataCategories.err.message);
+      return;
+    }
+
+    showAlert(`Категория "${data.title}" обновлена`);
+    unmountAllSections();
+    headerObj.updateHeaderTitle('Категории');
+    categoryObj.mount(dataCategories);
   };
 
   const renderIndex = async e => {
@@ -51,6 +91,8 @@ const initApp = async () => {
     unmountAllSections();
     headerObj.updateHeaderTitle('Новая категория');
     editCategoryObj.mount();
+    editCategoryObj.btnSave.addEventListener('click', postHandler); //send new data
+    editCategoryObj.btnSave.removeEventListener('click', patchHandler);
   });
 
   // checking: which card was clicked and find edit icon
@@ -63,11 +105,25 @@ const initApp = async () => {
       unmountAllSections();
       headerObj.updateHeaderTitle('Редактирование');
       editCategoryObj.mount(dataCards);
+
+      editCategoryObj.btnSave.addEventListener('click', patchHandler); //send updated data
+      editCategoryObj.btnSave.removeEventListener('click', postHandler);
+
       return;
     }
 
     if (target.closest('.category__del')) {
-      console.log('del');
+      if (confirm('Уверены, что хотите удалить категорию?')) {
+        const result = await fetchDeleteCategory(categoryItem.dataset.id);
+
+        if (result.err) {
+          showAlert(result.err.message);
+          return;
+        }
+
+        showAlert(`Категория удалена!`);
+        categoryItem.remove();
+      }
       return;
     }
 
