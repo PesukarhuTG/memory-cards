@@ -26,12 +26,12 @@ const createEditCategory = parentElem => {
 
   const tableHeadCellMain = createElement('th', {
     className: 'table__cell',
-    textContent: 'main',
+    textContent: 'front side',
   });
 
   const tableHeadCellSecond = createElement('th', {
     className: 'table__cell',
-    textContent: 'second',
+    textContent: 'back side',
   });
 
   const tableHeadCellEmpty = createElement('th', {
